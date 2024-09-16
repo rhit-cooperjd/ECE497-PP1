@@ -22,6 +22,7 @@ def runPartFour():
     showResults(successes, failures)
     
 def runIndSim(n):
+    """Models the random travel of a single agent."""
     walker = agent.Agent()
     xlist = np.zeros(n+1)
     ylist = np.zeros(n+1)
@@ -34,6 +35,7 @@ def runIndSim(n):
     return xlist, ylist, distanceList
 
 def makeIndSimGraph(n):
+    """Visually displays the results of Part Two."""
     x, y, distanceList = runIndSim(n)
     plt.plot(x, y)
     plt.plot(0,0,'ro')
@@ -45,16 +47,18 @@ def makeIndSimGraph(n):
     return distanceList
 
 def makeIndDistanceFromOriginGraph(n, distanceList):
+    """Visually displays the results of Part Two."""
     nlist = np.zeros(n+1)
     for i in range(n):
         nlist[i] = i
-    plt.stem(nlist, distanceList)
+    plt.stem(nlist, distanceList) # Stem plot is appropriate since steps are discrete.
     plt.title("Individual Agent's Travel From Origin")
     plt.xlabel("Step")
     plt.ylabel("Distance From Origin")
     plt.show()
 
 def runGroup(popsize, n):
+    """Simulation for Part 3."""
     xlist = np.zeros((popsize,n+1))
     ylist = np.zeros((popsize,n+1))
     distancesList = np.zeros((popsize,n+1))
@@ -63,6 +67,7 @@ def runGroup(popsize, n):
     return xlist, ylist, distancesList
 
 def makeGroupSimGraph(popsize, n):
+    """Displays results from Part Three."""
     x, y, distancesList = runGroup(popsize, n)
     plt.plot(0, 0, 'ro')
     for i in range(popsize):
@@ -75,6 +80,7 @@ def makeGroupSimGraph(popsize, n):
     return distancesList
 
 def makeGroupDistancesFromOriginGraph(popsize, n, distancesList):
+    """Displays results from Part Three."""
     nlist = np.zeros(n+1)
     average = np.mean(distancesList, axis=0)
     for i in range(n):
@@ -88,6 +94,7 @@ def makeGroupDistancesFromOriginGraph(popsize, n, distancesList):
     plt.show()
 
 def probabilityScaler(distance):
+    """Used in Part Four to provide error in setting the orientation based on distance from target."""
     p = 0.50
     if distance < 5:
         p = np.random.uniform(0.95, 1)
@@ -107,6 +114,7 @@ def printStats(walker, sensorDistance, sensorAngle, index):
     print("walker new orientation: " + str(walker.orientation))
 
 def runIndAttractionSim(n):
+    """Part Four simulation for a single agent."""
     walker = agent.Agent()
     destination = target.Target()
     xlist = np.zeros(n+1)
@@ -139,7 +147,8 @@ def runIndAttractionSim(n):
     plt.show()
 
 def runGroupAttractionSim(popsize, n):
-    walkerList = []
+    """Part Four simulation for a population of agents."""
+    walkerList = [] # Contains the agents
     totalRuns = popsize
     for j in range(popsize):
         walker = agent.Agent()
@@ -150,7 +159,6 @@ def runGroupAttractionSim(popsize, n):
     successCount = 0
     lock = False
     plt.plot(0,0,'ro')
-    plt.plot(destination.x, destination.y, 'bo')
     for k in range(popsize):
         lock = False
         walker = walkerList[k]
@@ -174,6 +182,7 @@ def runGroupAttractionSim(popsize, n):
             walker.orientation = 0
             plt.plot(xlist[k], ylist[k])
             plt.plot(xlist[k][-1], ylist[k][-1], 'ko')
+    plt.plot(destination.x, destination.y, 'bo')
     plt.title("Group Agent Simulation with Population {} and {} Steps".format(popsize, n))
     plt.xlabel("x")
     plt.ylabel("y")
